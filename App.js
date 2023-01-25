@@ -1,6 +1,6 @@
 import { useState,useEffect } from 'react';
 import {
-  Text,FlatList,StyleSheet, ScrollView,View, TouchableOpacity
+  Text,FlatList,StyleSheet, ScrollView,View, TouchableOpacity, TextInput, Image
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,11 +27,23 @@ function HomeScreen() {
 
 
   const printElement = ({item}) => {
+
+console.log(item);
+
+   
+   
     return(
+      
       <ScrollView style={styles.container}>
           <Text style={styles.textApi}>El id es: {item.id}</Text>
           <Text style={styles.textApi}>El nombre es: {item.name}</Text>
           <Text style={styles.textApi}>El precio es: {item.price} euros</Text>
+          <Image {item.name} ? 'Piña' 
+        style={{width: 300, height: 300}}
+        source={{
+          uri: '',
+        }}
+      />
       </ScrollView>
     )
   }
@@ -46,9 +58,25 @@ return(
 }
 
 
-function subirFrutaScreen() {
+function SubirFrutaScreen() {
+  const [TextoFruta, onChangeTextoFruta] = useState('');
+  const [TextoPrecio, onChangeTextoPrecio] = useState(null);
   return(
     <View>
+      <TextInput style={{height: 40, width: 250,borderWidth: 3,padding: 10, marginRight: 30,marginLeft:70, borderColor: 'gray'}}   
+                onChangeText={onChangeTextoFruta}
+                value={TextoFruta}
+                placeholder={"Inserte la fruta que quiera añadir"}
+      
+      />   
+
+      <TextInput style={{height: 40, width: 250,borderWidth: 3,padding: 10, marginRight: 30,marginLeft:70,marginTop: 16,marginBottom: 16, borderColor: 'gray'}}   
+                onChangeText={onChangeTextoPrecio}
+                value={TextoPrecio}
+                placeholder={"Inserte el precio que quiera añadirle"}
+      
+      />  
+
       <TouchableOpacity style={styles.button} onPress = {() => AnyadirFrutas()}>
         <Text>Subir la fruta</Text>
       </TouchableOpacity>
@@ -58,12 +86,12 @@ function subirFrutaScreen() {
 
 
 
-function AnyadirFrutas() {
+function AnyadirFrutas(TextoFruta,TextoPrecio) {
   let data = {
     method: 'POST',
     body: JSON.stringify({
-      name: "manzana",
-      price: 2
+      name:TextoFruta,
+      price: TextoPrecio
     }),
     headers: {
       'Accept':       'application/json',
@@ -104,7 +132,7 @@ function App(){
       >
         
         <Tab.Screen name="Mercado" component={HomeScreen} />
-        <Tab.Screen name="Listado Frutas" component={subirFrutaScreen}/>
+        <Tab.Screen name="Listado Frutas" component={SubirFrutaScreen}/>
 
       </Tab.Navigator>
     </NavigationContainer>
@@ -126,13 +154,16 @@ const styles = StyleSheet.create({
     fontFamily: 'italic',
     fontWeight: 'bold',
     fontSize: 20,
-    textTransform: 'lowercase'
 
   },
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 10,
+    borderRadius: 6,
+    margin:16
+
+    
   },
 })
 
