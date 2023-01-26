@@ -1,10 +1,11 @@
 import { useState,useEffect } from 'react';
 import {
-  Text,FlatList,StyleSheet, ScrollView,View, TouchableOpacity, TextInput, Image
+  Text,FlatList,StyleSheet, ScrollView,View, TouchableOpacity, TextInput, Image,NativeModules
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -38,11 +39,8 @@ console.log(item);
           <Text style={styles.textApi}>El id es: {item.id}</Text>
           <Text style={styles.textApi}>El nombre es: {item.name}</Text>
           <Text style={styles.textApi}>El precio es: {item.price} euros</Text>
-          <Image {item.name} ? 'Piña' 
+          <Image source={{uri:item.name=='manzana'?'https://comotecuidaunamanzana.eu/wp-content/uploads/elementor/thumbs/VERDE-prstxcbeo0akdr4roylsk3dmmomxbno8bgx0qdrdsw.png':item.name=='piña'?'https://www.gastronomiavasca.net/uploads/image/file/3415/w700_pi_a.jpg':item.name=='melocoton'?'https://i.blogs.es/daaeef/foto-apertura/450_1000.jpg':item.name=='uvas'?'https://efeagro.com/wp-content/uploads/2013/10/uvas.jpg':item.name=='naranjas'?'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201811/26/00118105700068____2__600x600.jpg':item.name=='kiwi'?'https://www.5aldia.es/es/wp-content/uploads/2017/09/kiwi.jpeg':item.name=='platano'?'https://www.despensa.es/documents/10180/10736/950435_G.jpg':item.name=='pera'?'https://www.efectofruta.com/images/thumbs/Pera-Limonera-0007378.jpeg':'https://www.efectofruta.com/images/thumbs/Pera-Limonera-0007378.jpeg'}}
         style={{width: 300, height: 300}}
-        source={{
-          uri: '',
-        }}
       />
       </ScrollView>
     )
@@ -77,7 +75,7 @@ function SubirFrutaScreen() {
       
       />  
 
-      <TouchableOpacity style={styles.button} onPress = {() => AnyadirFrutas()}>
+      <TouchableOpacity style={styles.button} onPress = {() => AnyadirFrutas(TextoFruta,TextoPrecio)}>
         <Text>Subir la fruta</Text>
       </TouchableOpacity>
     </View>
@@ -98,9 +96,10 @@ function AnyadirFrutas(TextoFruta,TextoPrecio) {
       'Content-Type': 'application/json',
     }
   }
-  return fetch('http://10.88.9.82:8080/fruits', data)
+  return (fetch('http://10.88.9.82:8080/fruits', data)
           .then(response => response.json())  // promise
-          .catch(error => console.log(error));
+          .catch(error => console.log(error)),
+          NativeModules.DevSettings.reload());
   } 
 
 
